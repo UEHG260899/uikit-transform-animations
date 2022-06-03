@@ -122,7 +122,26 @@ private extension ViewController {
     }
     
     func cubeTransition(label: UILabel, text: String) {
-        //TODO: Create a faux rotating cube animation
+        let tempLabel = duplicate(label)
+        tempLabel.text = text
+        let tempOffset = label.frame.height / 2
+        
+        let scale = CGAffineTransform(scaleX: 1, y: 0.1)
+        let translate = CGAffineTransform(translationX: 0, y: tempOffset)
+        tempLabel.transform = scale.concatenating(translate)
+        label.superview!.addSubview(tempLabel)
+        
+        UIView.animate(withDuration: 0.5, delay: 0,
+                       options: .curveEaseOut) {
+            tempLabel.transform = .identity
+            label.transform = scale.concatenating(translate.inverted())
+        } completion: { _ in
+            label.text = tempLabel.text
+            label.transform = .identity
+            tempLabel.removeFromSuperview()
+        }
+
+        
     }
     
     func depart() {
@@ -137,7 +156,6 @@ private extension ViewController {
         // populate the UI with the next flight's data
         originLabel.text = flight.origin
         gateNumberLabel.text = flight.gateNumber
-        statusLabel.text = flight.status
         summary.text = flight.summary
         
         if animated {
@@ -146,10 +164,12 @@ private extension ViewController {
             
             move(label: originLabel, text: flight.origin, offset: .init(x: flight.showWeatherEffects ? -80 : 80, y: 0))
             move(label: destinationLabel, text: flight.destination, offset: .init(x: 0, y: flight.showWeatherEffects ? -50 : 50))
+            cubeTransition(label: statusLabel, text: flight.status)
         } else {
             background.image = UIImage(named: flight.weatherImageName)
             destinationLabel.text = flight.destination
             flightNumberLabel.text = flight.number
+            statusLabel.text = flight.status
         }
         
         // schedule next flight
