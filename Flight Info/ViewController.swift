@@ -94,7 +94,31 @@ private extension ViewController {
     }
     
     func move(label: UILabel, text: String, offset: CGPoint) {
-        //TODO: Animate a label's translation property
+        let tempLabel = duplicate(label)
+        tempLabel.text = text
+        tempLabel.transform = .init(translationX: offset.x, y: offset.y)
+        tempLabel.alpha = 0
+        view.addSubview(tempLabel)
+        
+        UIView.animate(withDuration: 0.5,
+                       delay: 0,
+                       options: .curveEaseIn) {
+            label.transform = .init(translationX: offset.x, y: offset.y)
+            label.alpha = 0
+        }
+        
+        UIView.animate(withDuration: 0.25,
+                       delay: 0,
+                       options: .curveEaseIn) {
+            tempLabel.transform = .identity
+            tempLabel.alpha = 1
+        } completion: { _ in
+            label.text = text
+            label.alpha = 1
+            label.transform = .identity
+            tempLabel.removeFromSuperview()
+        }
+
     }
     
     func cubeTransition(label: UILabel, text: String) {
@@ -112,16 +136,20 @@ private extension ViewController {
     func changeFlight(to flight: Flight, animated: Bool = false) {
         // populate the UI with the next flight's data
         originLabel.text = flight.origin
-        destinationLabel.text = flight.destination
-        flightNumberLabel.text = flight.number
         gateNumberLabel.text = flight.gateNumber
         statusLabel.text = flight.status
         summary.text = flight.summary
         
         if animated {
             fade(to: UIImage(named: flight.weatherImageName)!, showEffects: flight.showWeatherEffects)
+            
+            
+            move(label: originLabel, text: flight.origin, offset: .init(x: flight.showWeatherEffects ? -80 : 80, y: 0))
+            move(label: destinationLabel, text: flight.destination, offset: .init(x: 0, y: flight.showWeatherEffects ? -50 : 50))
         } else {
             background.image = UIImage(named: flight.weatherImageName)
+            destinationLabel.text = flight.destination
+            flightNumberLabel.text = flight.number
         }
         
         // schedule next flight
