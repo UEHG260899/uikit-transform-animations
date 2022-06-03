@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="vXZ-lx-hvc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="vXZ-lx-hvc">
     <device id="retina6_5" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -118,6 +119,7 @@
                                 <size key="shadowOffset" width="0.0" height="1"/>
                             </label>
                         </subviews>
+                        <viewLayoutGuide key="safeArea" id="gCi-DU-YaN"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="hw7-Z5-Erh" firstAttribute="trailing" secondItem="kh9-bI-dsS" secondAttribute="trailing" id="1o5-gJ-f4u"/>
@@ -151,7 +153,6 @@
                             <constraint firstItem="ztY-G1-uag" firstAttribute="centerY" secondItem="fGd-ER-kNK" secondAttribute="centerY" id="sUc-jn-QJ1"/>
                             <constraint firstItem="390-GJ-GAy" firstAttribute="trailing" secondItem="kh9-bI-dsS" secondAttribute="trailing" id="vQI-gb-9bh"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="gCi-DU-YaN"/>
                     </view>
                     <nil key="simulatedTopBarMetrics"/>
                     <connections>
