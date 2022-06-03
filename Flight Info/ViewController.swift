@@ -145,18 +145,61 @@ private extension ViewController {
     }
     
     func depart() {
-        //TODO: Animate the plane taking off and landing
+        let planeCenter = plane.center
+        
+        UIView.animateKeyframes(withDuration: 1.5,
+                                delay: 0) { [plane = self.plane!] in
+            
+            UIView.addKeyframe(withRelativeStartTime: 0, relativeDuration: 0.25) {
+                plane.center.x += 80
+                plane.center.y -= 10
+            }
+            
+            UIView.addKeyframe(withRelativeStartTime: 0.1, relativeDuration: 0.4) {
+                plane.transform = .init(rotationAngle: -.pi / 8)
+            }
+            
+            UIView.addKeyframe(withRelativeStartTime: 0.25, relativeDuration: 0.25) {
+                plane.center.x += 100
+                plane.center.y -= 50
+                plane.alpha = 0
+            }
+            
+            UIView.addKeyframe(withRelativeStartTime: 0.51, relativeDuration: 0.01) {
+                plane.transform = .identity
+                plane.center = .init(x: 0, y: planeCenter.y)
+            }
+            
+            UIView.addKeyframe(withRelativeStartTime: 0.55, relativeDuration: 0.45) {
+                plane.alpha = 1
+                plane.center = planeCenter
+            }
+        }
     }
     
     func changeSummary(to summaryText: String) {
-        //TODO: Animate the summary text
+        
+        UIView.animateKeyframes(withDuration: 1.0, delay: 0) { [summary = self.summary!] in
+            UIView.addKeyframe(withRelativeStartTime: 0, relativeDuration: 0.45) {
+                summary.center.y -= 100
+            }
+            
+            UIView.addKeyframe(withRelativeStartTime: 0.5, relativeDuration: 0.45) {
+                summary.center.y += 100
+            }
+
+        }
+        
+        delay(seconds: 0.5) {
+            self.summary.text  = summaryText
+        }
     }
     
     func changeFlight(to flight: Flight, animated: Bool = false) {
         // populate the UI with the next flight's data
         originLabel.text = flight.origin
         gateNumberLabel.text = flight.gateNumber
-        summary.text = flight.summary
+
         
         if animated {
             fade(to: UIImage(named: flight.weatherImageName)!, showEffects: flight.showWeatherEffects)
@@ -165,11 +208,14 @@ private extension ViewController {
             move(label: originLabel, text: flight.origin, offset: .init(x: flight.showWeatherEffects ? -80 : 80, y: 0))
             move(label: destinationLabel, text: flight.destination, offset: .init(x: 0, y: flight.showWeatherEffects ? -50 : 50))
             cubeTransition(label: statusLabel, text: flight.status)
+            depart()
+            changeSummary(to: flight.summary)
         } else {
             background.image = UIImage(named: flight.weatherImageName)
             destinationLabel.text = flight.destination
             flightNumberLabel.text = flight.number
             statusLabel.text = flight.status
+            summary.text = flight.summary
         }
         
         // schedule next flight
